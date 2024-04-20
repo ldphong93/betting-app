@@ -1,0 +1,22 @@
+.default-button{
+    background: rgb(7, 115, 148);
+    width: 120px;
+    height: 30px;
+    color:white;
+    font-size:12px;
+}
+
+.create-match-button{
+    background: rgb(7, 115, 148);
+    width: 30px;
+    height: 30px;
+    display: flex;       
+    align-items: center;  
+    justify-content: center;
+    color:white;
+    font-size:11px;
+}
+
+.button-spacing {
+    margin-right: 10px;
+  }
