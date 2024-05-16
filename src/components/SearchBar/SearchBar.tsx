@@ -15,10 +15,7 @@ const SearchBar = ({ onSearch }) => {
 	};
 
 	return (
-		<div
-			className='d-flex justify-content-center'
-			style={{ marginTop: '20px' }}
-		>
+		<div style={{ marginTop: '20px' }}>
 			<label htmlFor='search-term'>
 				<input
 					type='text'
@@ -27,7 +24,6 @@ const SearchBar = ({ onSearch }) => {
 					value={searchTerm}
 					onChange={handleChange}
 					onKeyDown={handleKeyDown}
-					style={{ marginLeft: '5px' }}
 				/>
 			</label>
 			<Button

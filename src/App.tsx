@@ -2,58 +2,46 @@ import React, { useState, useEffect, createContext } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from 'components/Login/Login';
 import Matches from 'components/Matches/Matches';
+import { fetchMatchesFromServer } from './service';
+import MatchInfo from 'components/Matches/MatchInfo';
+import Header from 'components/Header/Header';
+import { EmptyUser } from 'common/DataType';
+import MatchForm from 'components/Matches/MatchForm';
 
 export const AppContext = createContext(null);
 
 function App() {
-	const [userDetail, setUserDetail] = useState(null);
+	const [userDetail, setUserDetail] = useState(EmptyUser);
 	const [allMatches, setAllMatches] = useState([]);
 
 	useEffect(() => {
-		//mock initial data
-		setAllMatches([
-			{
-				id: 1,
-				title: 'arsenal-mancity',
-				creationDate: '01/01/2024',
-				description: 'Super Sunday',
-			},
-			{
-				id: 2,
-				title: 'manu-liverpool',
-				creationDate: '05/01/2024',
-				description: 'Super Derby',
-			},
-		]);
-	}, []); // Empty
+		const fetchmatches = fetchMatchesFromServer(setAllMatches);
+		fetchmatches();
+	}, []);
 
-	// useEffect(() => {
-	// 	// Define this as an async function
-	// 	const fetchMatches = async () => {
-	// 		try {
-	// 			const response = await fetch('http://your-api-url.com/matches');
-	// 			const data = await response.json();
-
-	// 			setAllMatches(data);
-	// 		} catch (error) {
-	// 			console.error('Error fetching matches: ', error);
-	// 		}
-	// 	};
-
-	// 	// Call the function
-	// 	fetchMatches();
-	// }, []); // Empty dependency array means this effect runs once on mount
+	useEffect(() => {
+		setUserDetail(EmptyUser);
+	}, []);
 
 	return (
 		<AppContext.Provider
 			value={{ userDetail, setUserDetail, allMatches, setAllMatches }}
 		>
 			<Router>
-				<Routes>
-					<Route path='/' element={<Matches />} />
-					<Route path='/login' element={<Login />} />
-					{/* <Route path='/matches/:id' element={<MatchInfo />} /> */}
-				</Routes>
+				<Header />
+				<div
+					style={{
+						backgroundColor: 'whitesmoke',
+					}}
+				>
+					<Routes>
+						<Route path='/main' element={<Matches />} />
+						<Route path='/' element={<Login />} />
+						<Route path='/login' element={<Login />} />
+						<Route path='/match/add' element={<MatchForm />} />
+						<Route path='/matches/:id' element={<MatchInfo />} />
+					</Routes>
+				</div>
 			</Router>
 		</AppContext.Provider>
 	);

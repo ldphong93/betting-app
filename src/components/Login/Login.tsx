@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Button, Card, Form, Input } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../App';
 
 const loginURL = 'http://localhost:8080/login';
@@ -8,13 +8,16 @@ const loginURL = 'http://localhost:8080/login';
 interface ResultJson {
 	successful: boolean;
 	token: string;
+	id: number;
 	username: string;
 	role: string;
+	balance: number;
 }
 
 interface LoginValues {
 	username: string;
 	password: string;
+	balance: number;
 }
 
 export interface ErrorInfo {
@@ -53,21 +56,18 @@ const Login: React.FC = () => {
 			}
 
 			const token = resultJson.token;
-			setUserDetail(resultJson.username);
+			setUserDetail({
+				id: resultJson.id,
+				username: resultJson.username,
+				role: resultJson.role,
+				balance: resultJson.balance,
+			});
 			localStorage.setItem('userToken', token);
 			console.log(resultJson);
 
-			// dispatch(
-			// 	loginAction({
-			// 		username: resultJson.username,
-			// 		role: resultJson.role,
-			// 		token: resultJson.token,
-			// 	})
-			// );
-
 			console.log('User token: ', token);
 
-			navigate('/');
+			navigate('/main');
 		} catch (error) {
 			console.log('There was an error: ', error);
 		}
@@ -78,96 +78,90 @@ const Login: React.FC = () => {
 	};
 
 	return (
-		<div className='d-flex justify-content-center flex-column align-items-center'>
-			<h1
-				style={{ fontSize: '30px', fontWeight: 'bold', marginBottom: '20px' }}
-			>
-				Login
-			</h1>
-			<Card bordered={true} style={{ border: '1px groove' }}>
-				<Form
-					name='basic'
-					labelCol={{
-						span: 8,
-					}}
-					wrapperCol={{
-						span: 16,
-					}}
+		<div
+			style={{
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				height: '100vh',
+			}}
+		>
+			<div>
+				<h1
 					style={{
-						maxWidth: 600,
+						fontSize: '30px',
+						fontWeight: 'bold',
+						marginBottom: '20px',
+						textAlign: 'center',
 					}}
-					initialValues={{
-						remember: true,
-					}}
-					onFinish={onFinish}
-					onFinishFailed={onFinishFailed}
-					autoComplete='off'
 				>
-					<Form.Item
-						label='Username'
-						labelCol={{ span: 24 }}
-						wrapperCol={{ span: 24 }}
-						// fontSize='50px'
-						name='username'
-						// placeholder='Input text'
-						rules={[
-							{
-								required: true,
-								message: 'Please input your username!',
-							},
-						]}
-					>
-						<Input />
-					</Form.Item>
-
-					<Form.Item
-						label='Password'
-						labelCol={{ span: 24 }}
-						wrapperCol={{ span: 24 }}
-						name='password'
-						rules={[
-							{
-								required: true,
-								message: 'Please input your password!',
-							},
-						]}
-					>
-						<Input.Password />
-					</Form.Item>
-
-					<Form.Item
-						wrapperCol={{
-							offset: 0,
-							span: 24,
+					Login
+				</h1>
+				<Card bordered={true} style={{ border: '1px groove' }}>
+					<Form
+						name='basic'
+						labelCol={{
+							span: 8,
 						}}
-					>
-						{errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-						<Button type='primary' htmlType='submit' block>
-							Login
-						</Button>
-					</Form.Item>
-
-					<Form.Item
 						wrapperCol={{
-							offset: 4,
 							span: 16,
 						}}
+						style={{
+							maxWidth: 600,
+						}}
+						initialValues={{
+							remember: true,
+						}}
+						onFinish={onFinish}
+						onFinishFailed={onFinishFailed}
+						autoComplete='off'
 					>
-						<p>If you don't have an account?</p>
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'center',
-								marginTop: '10px',
+						<Form.Item
+							label='Username'
+							labelCol={{ span: 24 }}
+							wrapperCol={{ span: 24 }}
+							name='username'
+							rules={[
+								{
+									required: true,
+									message: 'Please input your username!',
+								},
+							]}
+						>
+							<Input />
+						</Form.Item>
+
+						<Form.Item
+							label='Password'
+							labelCol={{ span: 24 }}
+							wrapperCol={{ span: 24 }}
+							name='password'
+							rules={[
+								{
+									required: true,
+									message: 'Please input your password!',
+								},
+							]}
+						>
+							<Input.Password />
+						</Form.Item>
+
+						<Form.Item
+							wrapperCol={{
+								offset: 0,
+								span: 24,
 							}}
 						>
-							<Link to='/registration' style={{ fontWeight: 'bold' }}>
-								Register
-							</Link>
-						</div>
-					</Form.Item>
-				</Form>
-			</Card>
+							{errorMessage && (
+								<div style={{ color: 'red' }}>{errorMessage}</div>
+							)}
+							<Button type='primary' htmlType='submit' block>
+								Login
+							</Button>
+						</Form.Item>
+					</Form>
+				</Card>
+			</div>
 		</div>
 	);
 };

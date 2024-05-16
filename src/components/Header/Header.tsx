@@ -3,6 +3,7 @@ import Button from '../../common/Button/Button';
 import React, { useContext } from 'react';
 import { AppContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
+import { EmptyUser } from 'common/DataType';
 
 const Header: React.FC = () => {
 	const { userDetail, setUserDetail } = useContext(AppContext);
@@ -10,29 +11,39 @@ const Header: React.FC = () => {
 	const navigate = useNavigate();
 	const onClickLogOut = () => {
 		localStorage.removeItem('userToken');
-		// setUserDetail('');
+		setUserDetail(EmptyUser);
 		navigate('/login');
 	};
 
 	return (
-		<h1
-			className='d-flex justify-content-between'
-			style={{ backgroundColor: 'whitesmoke' }}
+		<div
+			style={{
+				display: 'flex',
+				justifyContent: 'space-between',
+				// backgroundColor: 'whitesmoke',
+				padding: '20px',
+			}}
 		>
-			<div style={{ padding: '20px 20px' }}>
+			<div>
 				<Logo />
 			</div>
-			<div style={{ padding: '20px 20px' }}>
-				<div className='d-flex justify-content-center'>
-					<p style={{ marginRight: '15px' }}>{userDetail.username}</p>
-					<Button
-						buttonName='LOG OUT'
-						className='default-button'
-						onClick={onClickLogOut}
-					/>
-				</div>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+				}}
+			>
+				<p style={{ marginRight: '15px' }}>{userDetail.username}</p>
+				<p style={{ marginRight: '15px', fontWeight: 'bold' }}>
+					<span>{userDetail.balance}</span>
+				</p>
+				<Button
+					buttonName='LOG OUT'
+					className='default-button'
+					onClick={onClickLogOut}
+				/>
 			</div>
-		</h1>
+		</div>
 	);
 };
 
